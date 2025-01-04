@@ -14,11 +14,9 @@ vector<string> permute_string(std::string s) {
 vector<int> compute_prefix_function(const std::string& p) {
         const size_t m = p.length();
         vector<int> pf(m);
-        // pf[0] is always 0 because the first character has no proper prefix.
-        pf[0] = 0;
-        int k = 0;
+        pf[0] = 0; // always 0 because the first character has no proper prefix.
+        int k = 0; // stores the length of the current candidate for the longest proper prefix suffix.
         for (size_t q = 1; q < m; ++q) {
-                // k stores the length of the current candidate for the longest proper prefix suffix.
                 //int k = pf[q - 1];
                 while (k > 0 && p[k] != p[q]) {
                         k = pf[k - 1];
@@ -27,7 +25,7 @@ vector<int> compute_prefix_function(const std::string& p) {
                         ++k;
                 }
                 pf[q] = k;
-                printf("pf[%ld] = %d\n", q, pf[q]);
+                //printf("pf[%ld] = %d\n", q, pf[q]);
         }
         return pf;
 }
@@ -40,9 +38,9 @@ Prefix Function: 0 0 1 2 0 1 2 3 4
 
 int count_substr(string_view t, const std::string& p) {
         vector<int> pf = compute_prefix_function(p); // calculate the KMP prefix function
-        for (const int i : pf) { printf("%d ", i); }
-        puts("\n");
-        fflush(stdout);
+        //for (const int i : pf) { printf("%d ", i); }
+        //puts("\n");
+        //fflush(stdout);
         const int m = p.size();
         int cnt = 0;    // ocurrence count
         int q = 0;      // number of chars matched
@@ -86,17 +84,20 @@ int main()
         const int cnt = count_substr(m, n);
         cout << n << " " << cnt << endl;
 #else
-        string m ="aabababbaababab";
-        string n = "baa";
+        //string m ="aabababbaababab";
+        //string n = "baa";
+        string m = "ABABDABACDABABCABAB";
+        string n = "ABABCABAB";
         // Find the count of all sub string of n which are in m,
         //   e.g. aab, aba, baa = 2 + 4 + 1 = 7
         vector<string> v = permute_string(n);
         for (const auto& s : v) {
-                cout << s << " " << count_substr(m, s) << endl;
+                const int cnt = count_substr(m, s);
+                if (cnt)
+                        cout << s << " " << cnt << endl;
         } 
 #endif
         cout << endl;
-        cout << "sorted: " << n << endl;
-        cout << endl;
+        //cout << "sorted: " << n << endl;
         return 0;
 }
