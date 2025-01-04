@@ -29,7 +29,7 @@ double TimeSeries::GetValue(time_t time) const {
     int low = 0, high = m_ts.size() - 1;
     while (low <= high) {
         // calculate middle index
-        int mid = low + ((high - low) >> 1);
+        const int mid = low + ((high - low) >> 1);
 
         // check for target at mid, assume there are no multiple matches.
         if (m_ts[mid].first == time)
