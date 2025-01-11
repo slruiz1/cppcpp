@@ -3,43 +3,49 @@
 #include <climits> 
 using namespace std;
 
+// Implement a custom queue with max tracking
+
 void printKMax(int arr[], int n, int k){
+    deque<int> max_q;
+    deque<int> q;
+    max_q.emplace_back(INT_MIN);
     int left = n;
-    while (left >= k) {
-        int start = n-left;
-        int max=INT_MIN;
-        for (int j=0; j < k; ++j) {
-            int i = arr[start+j];
-            if (max < i) {
-                max = i;
+    while (left > 0 || !max_q.empty()) {
+        // Fill subarray
+        if (left > 0) {
+            const int start = n-left;
+            const int end = min(k,left);
+            for (int j=0; j < end; ++j) {
+                const int i = arr[start+j];
+                // Enqueue
+                q.push_back(i);
+                while (!max_q.empty() && max_q.back() < i) {
+                    max_q.pop_back();
+                }
+                max_q.push_back(i);
+//printf(">>> %d/%d. PUSH(%d), max: %d\n", start+j, end, i, max_q.front());
+                // --
+                left--;
+                if (q.size() == (size_t)k) {
+                    break;
+                }
             }
+        } else if (q.size() < (size_t)k) {
+            break;
         }
-        left--;
-        cout << max << " ";
+        // Dequeue
+        cout << max_q.front() << " ";
+        if (q.front() == max_q.front()) {
+            max_q.pop_front();
+        }
+//printf("<<< POP: %d, left: %d, max: %d\n", q.front(), left, max_q.front());
+        q.pop_front();
     }
     cout << endl;
-    cin.ignore();
-#if SLOW
-    deque<int> dq(&arr[0], &arr[n]);
-printf("\n|~~> size: %lu, k: %d\n", dq.size(), k);
-    while (dq.size() >= (size_t)k) {
-        int max=INT_MIN;
-        for (int j=0; j < k; ++j) {
-            int i = dq[j];
-            if (max < i) {
-                max = i;
-            }
-        }
-        dq.pop_front();
-        cout << max << " ";
-    }
-    cout << endl;
-#endif
 }
 
 int main(){
-  
-	int t;
+ 	int t;
 	cin >> t;
 	while(t>0) {
 		int n,k;
