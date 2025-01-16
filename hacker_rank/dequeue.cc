@@ -18,6 +18,8 @@ void printKMax(int arr[], int n, int k){
             for (int j=0; j < end; ++j) {
                 const int i = arr[start+j];
                 // Enqueue
+                // max queue must contain elements in decreasing order, any element that
+                // will get dequeued before it gets a chance to become max must be removed from max queue
                 q.push_back(i);
                 while (!max_q.empty() && max_q.back() < i) {
                     max_q.pop_back();
