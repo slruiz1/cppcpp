@@ -1,10 +1,34 @@
 #include <bits/stdc++.h>
 #include <pthread.h>
+#include <atomic>
+#include <immintrin.h>
+
+pthread_barrier_t barrier;
 
 using namespace std;
 
 // USE: spinlock if we expect to be waiting for a VERY SHORT period of time.
-//      keep thread alive, busy waiting on lock
+//      keep thread alive, busy waiting on lock (i.e., with yield)
+struct spinlock_amd
+{
+    void lock()
+    {
+        for (;;)
+        {
+            bool was_locked = locked.load(std::memory_order_relaxed);
+            if (!was_locked && locked.compare_exchange_weak(was_locked, true, std::memory_order_acquire))
+                break;
+            _mm_pause();
+        }
+    }
+    void unlock()
+    {
+        locked.store(false, std::memory_order_release);
+    }
+ 
+private:
+    std::atomic<bool> locked{false};
+};
 
 int main() {
     // Random number generator
