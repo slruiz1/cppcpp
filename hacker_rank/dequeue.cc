@@ -46,6 +46,8 @@ void printKMax(int arr[], int n, int k){
     cout << endl;
 }
 
+constexpr string s("hello");
+
 int main(){
  	int t;
 	cin >> t;
