@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <bitset>
 #include <memory>
+#include <type_traits>
 
 using namespace std;
 
@@ -51,10 +52,13 @@ public:
 };
 
 int main() {
+    static_assert(std::is_default_constructible_v<BloomFilter> == true);
     /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
     int N,S,P,Q;
-    //unique_ptr<bitset<0x7fffffff>> bits(new bitset<0x7fffffff>());
-    bitset<0x7fffffff>* bits = (bitset<0x7fffffff>*)std::aligned_alloc(128, sizeof(bitset<0x7fffffff>));
+    unique_ptr<bitset<0x7fffffff>> bits(new bitset<0x7fffffff>());
+    //void *ptr = std::aligned_alloc(64, sizeof(bitset<0x7fffffff>));
+    //bitset<0x7fffffff>* bits = new (ptr) bitset<0x7fffffff>;
+    
     auto& unique_nums = *bits;
     cin >> N >> S >> P >> Q;
     //cout << endl << "||~~> N=" << N << ", S=" << S << ", P=" << P << ", Q=" << Q << endl;
@@ -67,6 +71,6 @@ int main() {
         }
     }
     cout << unique_nums.count() << endl;
-    free(bits);
+    //free(ptr);
     return 0;
 }
