@@ -23,6 +23,8 @@ public:
         void push(int x) {
                 if (!m_s.empty()) {
                         printf("PUSH - s.top(): %d, min: %d, peek: %d, X: %d\n", top(), min(), peek(), x);
+			m_min = x;
+                        m_s.push(x);
                 }
                 if (x < m_min) { // we want top < new min (x).
                         m_s.push((x << 1) - m_min);
